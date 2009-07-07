@@ -7,5 +7,15 @@ function setup_gears() {
     var localServer = google.gears.factory.create('beta.localserver');
     var store = localServer.createManagedStore('test-store');
     store.manifestUrl = '/static/todoy_manifest.json';
+    store.oncomplete = function(details){
+        $('#current_version').html("Local Version: " + store.currentVersion);
+    };
+    store.onerror = function(error){
+        alert(error.message);
+    }
     store.checkForUpdate();
+}
+
+function show_day() {
+    setup_gears();
 }
