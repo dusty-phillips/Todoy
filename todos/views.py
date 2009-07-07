@@ -1,5 +1,5 @@
 from django.http import HttpResponse
 
-def list(request):
+def day(request):
     return HttpResponse('hello world')
 
