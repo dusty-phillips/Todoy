@@ -5,8 +5,8 @@ from django.conf.urls.defaults import *
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^todoy/', include('todoy.foo.urls')),
+    (r'^$', 'django.views.generic.simple.redirect_to', {'url': '/todos/'}),
+    (r'^todos', include('todoy.todos.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
