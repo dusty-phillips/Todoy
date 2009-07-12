@@ -21,16 +21,58 @@ function show_day() {
 }
 
 function add_todo() {
+    clear_todo_form();
     $('#save_button').click(save_new_todo);
     $('#close_button').click(function () {$('#todo_edit_box').fadeOut();});
+    $('#todo_id').val("NEW");
     $('#todo_edit_box').fadeIn();
 
 }
+
+function clear_todo_form() {
+    $('#todo_date').val('');
+    $('#todo_title').val('');
+    $('#todo_time').val('');
+}
+
 function save_new_todo() {
-    alert('saving...');
+    db = db_connection();
+    var todo = {
+        'modified': new Date().toISOString(),
+        'time': $('#todo_time').val(),
+        'date': $('#todo_date').val(),
+        'title': $('#todo_title').val()
+    }
+    db.execute(
+            'insert into todos ' +
+            '(modified, date, time, title) values ' +
+            '(?, ?, ?, ?)',
+            [todo.modified,
+            todo.date,
+            todo.time,
+            todo.title
+            ]);
+    rs = db.execute('select last_insert_rowid()');
+    todo.local_id = rs.field(0);
+    window.location.reload(true);
 }
 
 //UTILITY FUNCTIONS
+function db_connection() {
+    db = google.gears.factory.create('beta.database');
+    db.open('todoy-database');
+    db.execute('create table if not exists todos' +
+            ' (local_id integer PRIMARY KEY AUTOINCREMENT,' +
+            ' server_id varchar null,' +
+            ' date date,' +
+            ' time time default \'\',' +
+            ' title varchar default \'\',' +
+            ' modified datetime,' +
+            ' deleted boolean default false' +
+            ')'
+            );
+    return db;
+}
 function redirect(path) {
     window.location.href = window.location.protocol +
        '//' + window.location.host + path;
