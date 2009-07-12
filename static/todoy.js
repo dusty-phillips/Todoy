@@ -19,3 +19,14 @@ function setup_gears() {
 function show_day() {
     setup_gears();
 }
+
+function add_todo() {
+    $('#save_button').click(save_new_todo);
+    $('#close_button').click(function () {$('#todo_edit_box').fadeOut();});
+    $('#todo_edit_box').fadeIn();
+
+}
+function save_new_todo() {
+    alert('saving...');
+}
+

@@ -15,7 +15,33 @@
     <body>
         <div id="current_version">
         </div>
+        {% block menu %}
+        <div id="menu">
+            <a href="javascript:add_todo()">New</a>
+        </div>
+        {% endblock %}
         {% block content %}
         {% endblock %}
+        <div id="todo_edit_box">
+            <div>
+            <form>
+                <input type="hidden" name="todo_id" id="todo_id" />
+                <label for="todo_date">Date:</label>
+                <input type="text" name="date" id="todo_date" />
+                <br />
+                <label for="todo_title">Title:</label>
+                <input type="text" name="title" id="todo_title" />
+                <br />
+                <label for="todo_time">Time:</label>
+                <input type="text" name="time" id="todo_time" />
+                <br />
+                <button type="button" id="close_button">Close</button> 
+                <button type="button" id="save_button">Save</button>
+                {% if has_delete %}
+                <button type="button" id="delete_button">Delete</button>
+                {% endif %}
+            </form>
+            </div>
+        </div>
     </body>
 </html>
