@@ -18,6 +18,25 @@ function setup_gears() {
 
 function show_day() {
     setup_gears();
+    db = db_connection();
+    var todo_date = $.url.param('todo_date');
+    if (!todo_date) {
+        todo_date = new Date().toDBDate();
+    }
+    var rs = db.execute(
+        "select local_id, title, time, completed from todos where date=?",
+            [todo_date]);
+    while (rs.isValidRow()) {
+        todo = {
+            'local_id': rs.fieldByName('local_id'),
+            'title': rs.fieldByName('title'),
+            'completed': rs.fieldByName('completed'),
+            'time': rs.fieldByName('time')
+        }
+        $('#day_list').append(render_todo_item(todo));
+        rs.next();
+    }
+
 }
 
 function add_todo() {
@@ -26,7 +45,6 @@ function add_todo() {
     $('#close_button').click(function () {$('#todo_edit_box').fadeOut();});
     $('#todo_id').val("NEW");
     $('#todo_edit_box').fadeIn();
-
 }
 
 function clear_todo_form() {
@@ -57,6 +75,16 @@ function save_new_todo() {
     window.location.reload(true);
 }
 
+function render_todo_item(todo) {
+    var li = "<li id = 'todo-item-" + todo.local_id;
+    if (todo.completed == true) {
+        li = li + "' class='completed";
+    }
+    li = li + "'>" +
+        todo.title + "</li>";
+    return li;
+}
+
 //UTILITY FUNCTIONS
 function db_connection() {
     db = google.gears.factory.create('beta.database');
@@ -68,15 +96,37 @@ function db_connection() {
             ' time time default \'\',' +
             ' title varchar default \'\',' +
             ' modified datetime,' +
-            ' deleted boolean default false' +
+            ' deleted boolean default false,' +
+            ' completed boolean default false' +
             ')'
             );
     return db;
 }
+
+function pad_zero(digit) {
+    // return a string that is at least two digits long
+    var retstr = '' + digit;
+    if (retstr.length < 2) {
+        return '0' + retstr;
+    }
+    return retstr;
+}
+
 function redirect(path) {
     window.location.href = window.location.protocol +
        '//' + window.location.host + path;
 }
+
+Date.prototype.toDBDate = function () {
+    return this.getFullYear() + '-' + pad_zero(this.getMonth()+1) + '-' +
+        pad_zero(this.getDate());
+}
+
+Date.prototype.toDBDatetime = function () {
+    return this.toDBDate() + 'T' + pad_zero(this.getHours()) + ':' +
+            pad_zero(this.getMinutes()) + ':' + pad_zero(this.getSeconds());
+}
+
 
 Date.prototype.toISOString = function (format, offset) {
     /* accepted values for the format [1-6]:
