@@ -25,6 +25,7 @@ function show_day() {
     }
     $('#date_header').html(todo_date);
     $('#todo_date').datepicker({dateFormat: 'yy-mm-dd'});
+    $('#todo_time').timepickr({convention: '12'});
     var rs = db.execute(
         "select local_id, title, time, completed from todos where date=?",
             [todo_date]);
@@ -38,7 +39,6 @@ function show_day() {
         $('#day_list').append(render_todo_item(todo));
         rs.next();
     }
-
 }
 
 function switch_day(increment) {
