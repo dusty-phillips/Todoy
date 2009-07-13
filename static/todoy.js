@@ -24,6 +24,7 @@ function show_day() {
         todo_date = new Date().toDBDate();
     }
     $('#date_header').html(todo_date);
+    $('#todo_date').datepicker({dateFormat: 'yy-mm-dd'});
     var rs = db.execute(
         "select local_id, title, time, completed from todos where date=?",
             [todo_date]);
