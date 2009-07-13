@@ -23,6 +23,7 @@ function show_day() {
     if (!todo_date) {
         todo_date = new Date().toDBDate();
     }
+    $('#date_header').html(todo_date);
     var rs = db.execute(
         "select local_id, title, time, completed from todos where date=?",
             [todo_date]);
