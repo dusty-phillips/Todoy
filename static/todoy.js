@@ -48,6 +48,7 @@ function switch_day(increment) {
 
 function add_todo() {
     clear_todo_form();
+    $('#todo_date').val(param_date_or_today().toDBDate());
     $('#save_button').click(save_new_todo);
     $('#close_button').click(function () {$('#todo_edit_box').fadeOut();});
     $('#todo_id').val("NEW");
