@@ -40,6 +40,12 @@ function show_day() {
 
 }
 
+function switch_day(increment) {
+    var target_date = param_date_or_today();
+    target_date.setDate(target_date.getDate() + increment);
+    redirect('/todos/?todo_date=' + target_date.toDBDate());
+}
+
 function add_todo() {
     clear_todo_form();
     $('#save_button').click(save_new_todo);
@@ -118,9 +124,26 @@ function redirect(path) {
        '//' + window.location.host + path;
 }
 
+function param_date_or_today() {
+    var target_date = new Date();
+    var todo_date = $.url.param('todo_date');
+    if (todo_date) {
+        target_date.fromDBDate(todo_date);
+    }
+    return target_date;
+}
+
 Date.prototype.toDBDate = function () {
     return this.getFullYear() + '-' + pad_zero(this.getMonth()+1) + '-' +
         pad_zero(this.getDate());
+}
+
+Date.prototype.fromDBDate = function(string) {
+    var regexp = "([0-9]{4})-([0-9]{2})-([0-9]{2})";
+    var d = string.match(new RegExp(regexp));
+    this.setFullYear(d[1]);
+    this.setMonth(d[2] - 1);
+    this.setDate(d[3]);
 }
 
 Date.prototype.toDBDatetime = function () {
