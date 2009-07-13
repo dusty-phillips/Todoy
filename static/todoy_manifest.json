@@ -1,6 +1,6 @@
 {
   "betaManifestVersion": 1,
-  "version": "8",
+  "version": "9",
   "entries": [
     { "url": "/static/gears_init.js" },
     { "url": "/static/styles.css"},

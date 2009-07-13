@@ -86,7 +86,7 @@ function save_new_todo() {
 
 function render_todo_item(todo) {
     var li = "<li id = 'todo-item-" + todo.local_id;
-    if (todo.completed == true) {
+    if (todo.completed == 'true') {
         li = li + "' class='completed";
     }
     li = li + "'>" +
