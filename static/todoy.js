@@ -11,7 +11,7 @@ function setup_gears() {
         $('#current_version').html("Local Version: " + store.currentVersion);
     };
     store.onerror = function(error){
-        alert(error.message);
+        //alert(error.message);
     }
     store.checkForUpdate();
 }
