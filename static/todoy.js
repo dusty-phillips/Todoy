@@ -26,6 +26,7 @@ function show_day() {
     $('#date_header').html(todo_date);
     $('#todo_date').datepicker({dateFormat: 'yy-mm-dd'});
     $('#todo_time').timepickr({convention: '12'});
+    $('.complete_todo').live('click', complete_todo);
     var rs = db.execute(
         "select local_id, title, time, completed from todos where date=?",
             [todo_date]);
@@ -54,6 +55,17 @@ function add_todo() {
     $('#close_button').click(function () {$('#todo_edit_box').fadeOut();});
     $('#todo_id').val("NEW");
     $('#todo_edit_box').fadeIn();
+}
+
+function complete_todo(evt) {
+    var re = /todo-item-(\d+)/;
+    var id = $(this).parent().attr('id');
+    id = id.match(re)[1];
+    db = db_connection();
+    db.execute("update todos set completed = 'true' where local_id = ?",
+            [id]);
+    $(this).parent().attr('class', 'completed');
+
 }
 
 function clear_todo_form() {
@@ -89,8 +101,7 @@ function render_todo_item(todo) {
     if (todo.completed == 'true') {
         li = li + "' class='completed";
     }
-    li = li + "'>" +
-        todo.title + "</li>";
+    li = li + "'><span class='complete_todo'>" + todo.title + "</span></li>";
     return li;
 }
 
