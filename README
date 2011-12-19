@@ -1,5 +1,0 @@
-Todoy is an offline-enabled todo management system built on the principles I've outlined here:
-
-http://archlinux.me/dusty/2009/05/17/todo-list-design/
-
-Its still early-stages, its amazing how much boilerplate you need for an offline-enabled app (html 5 is not prime time yet), so I'm not bothering with a large readme.
