@@ -1,12 +1,12 @@
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns('todoy.todos.views',
     # Examples:
-    # url(r'^$', 'todoy.views.home', name='home'),
+    url(r'^$', 'index', name='index'),
     # url(r'^todoy/', include('todoy.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
