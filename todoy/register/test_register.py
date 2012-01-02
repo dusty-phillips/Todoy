@@ -1,5 +1,5 @@
 from mongoengine.django.auth import User
-from django.test.utils import override_settings
+from todoy.conftest import override_settings
 
 def test_valid_register(mc):
     assert len(User.objects.all()) == 1
@@ -25,6 +25,7 @@ def test_passwords_no_match(mc):
     assert response.context['form'].errors['__all__'] == [u"The passwords do not match"]
 
 def test_duplicate_name(mc):
+    '''test_user is created on the mc funcarg'''
     response = mc.client.post("/accounts/register/",
             {'username': 'test_user',
                 'password': 'portish',
