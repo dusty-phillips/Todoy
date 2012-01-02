@@ -9,8 +9,10 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^accounts/login/$', 'todoy.register.views.login'),
     url(r'^accounts/register/$', 'todoy.register.views.register'),
+    url(r'^accounts/logout/$', 'todoy.register.views.logout'),
 
     url(r'^$', 'todoy.todos.views.index', name='index'),
+    url(r'^home/(?P<username>[^/]+)/$', 'todoy.todos.views.user_home', name='user_home'),
     # url(r'^todoy/', include('todoy.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

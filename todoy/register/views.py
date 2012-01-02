@@ -1,7 +1,9 @@
 from django.conf import settings
 from django.template import RequestContext
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, render
 from django.http import HttpResponseForbidden
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login as auth_login, logout as auth_logout
 
 from mongoengine.django.auth import User
 
@@ -19,9 +21,17 @@ def register(request):
                 email=form.cleaned_data['email'])
         return redirect("/accounts/login/")
     
-    return render_to_response("accounts/register.html",
-            RequestContext(request, {'form': form}))
+    return render(request, "accounts/register.html", {'form': form})
 
 def login(request):
-    from django.http import HttpResponse
-    return HttpResponse("Boilerplate") 
+    form = AuthenticationForm(data=request.POST or None)
+    
+    if form.is_valid():
+        auth_login(request, form.user_cache)
+        return redirect("/home/%s/" % form.cleaned_data['username'])
+    
+    return render(request, 'accounts/login.html', {'form': form})
+
+def logout(request):
+    auth_logout(request)
+    return redirect("/")
