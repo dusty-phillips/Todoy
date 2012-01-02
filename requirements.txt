@@ -3,7 +3,7 @@ distribute==0.6.24
 ipython==0.12
 mongoengine==0.5.2
 py==1.4.6
-pyjaco==1.0.0
+-e git+git@github.com:buchuki/pyjaco.git@8ba1d3c9f7034421bd8eca62e629ebca1375672d#egg=pyjaco-dev
 pymongo==2.1
 pytest==2.2.1
 wsgiref==0.1.2
