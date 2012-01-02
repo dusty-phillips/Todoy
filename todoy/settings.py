@@ -1,25 +1,24 @@
 import os
+import mongoengine
 PROJECT_HOME = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Dusty Phillips', 'dusty@archlinux.ca'),
 )
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
+# see: http://mongoengine.org/docs/v0.5/guide/connecting.html#guide-connecting
+MONGO_DATABASE_NAME = "todoy"
+
+SESSION_ENGINE = 'mongoengine.django.sessions'
+AUTHENTICATION_BACKENDS = (
+    'mongoengine.django.auth.MongoEngineBackend',
+)
+mongoengine.connect(MONGO_DATABASE_NAME) 
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -154,3 +153,4 @@ LOGGING = {
         },
     }
 }
+
