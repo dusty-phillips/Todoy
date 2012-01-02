@@ -156,3 +156,4 @@ LOGGING = {
     }
 }
 
+DISABLE_REGISTRATION = False

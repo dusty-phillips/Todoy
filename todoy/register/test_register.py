@@ -1,4 +1,5 @@
 from mongoengine.django.auth import User
+from django.test.utils import override_settings
 
 def test_valid_register(mc):
     assert len(User.objects.all()) == 1
@@ -32,6 +33,7 @@ def test_duplicate_name(mc):
     assert response.status_code == 200
     assert response.context['form'].errors['username'] == ["The user test_user already exists"]
 
-
-# other functions for testing incorrect password, duplicate name, registration enabled...
-
+def test_registration_disabled(mc):
+    with override_settings(DISABLE_REGISTRATION=True):
+        response = mc.client.get("/accounts/register/")
+    assert response.status_code == 403
