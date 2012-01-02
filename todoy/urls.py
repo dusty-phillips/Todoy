@@ -5,9 +5,12 @@ from django.conf import settings
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('todoy.todos.views',
+urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'index', name='index'),
+    url(r'^accounts/login/$', 'todoy.register.views.login'),
+    url(r'^accounts/register/$', 'todoy.register.views.register'),
+
+    url(r'^$', 'todoy.todos.views.index', name='index'),
     # url(r'^todoy/', include('todoy.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

@@ -1,0 +1,26 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+    <title>{% block title %}Todoy{% endblock %}</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="/static/css/jquery.mobile-1.0.min.css" />
+	<script type="text/javascript" src="/static/js/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.mobile-1.0.min.js"></script>
+  <script type="text/javascript" src="/static/js/todoy.js"></script>
+</head> 
+<body> 
+
+<div data-role="page" id="main_page">
+	<header data-role="header" class="ui-bar">
+  {% block header %}Welcome to Todoy{% endblock %}
+	</header>
+
+	<div data-role="content">	
+    {% block content %}
+    {% endblock %}
+	</div>
+
+</div>
+
+</body>
+</html>
