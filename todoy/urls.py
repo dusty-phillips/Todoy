@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 
     url(r'^$', 'todoy.todos.views.index', name='index'),
     url(r'^home/(?P<username>[^/]+)/$', 'todoy.todos.views.user_home', name='user_home'),
+    url(r'^home/(?P<username>[^/]+)/cache.manifest$', 'todoy.todos.views.user_manifest', name='user_manifest'),
     # url(r'^todoy/', include('todoy.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

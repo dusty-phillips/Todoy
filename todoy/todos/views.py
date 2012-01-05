@@ -7,3 +7,7 @@ def index(request):
 @login_required
 def user_home(request, username):
     return render(request, "home.html")
+
+@login_required
+def user_manifest(request, username):
+    return render(request, "cache.manifest", content_type="text/cache-manifest")
