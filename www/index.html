@@ -1,12 +1,12 @@
-<html>
-<head>
-	<title>Welcome to Todoy</title>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-	<script type="text/javascript" src="/js/py-builtins.js"></script>
-	<script type="text/javascript" src="/js/pyjados.js"></script>
-	<link rel="stylesheet" href="/css/master.css" type="text/css"
-                media="screen" charset="utf-8" />
-<body>
-<h1>Todoy</h1>
-</body>
-</html>
+^L
+if request.authenticated:
+    name = request.user.username
+else:
+    name = "nobody"
+
+^L
+{% extends 'base.html' %}
+
+{% block content %}
+hello {{name}} how are you today?
+{% end %}

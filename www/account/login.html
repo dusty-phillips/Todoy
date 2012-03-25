@@ -1,0 +1,20 @@
+# -*- python -*-
+from trembling.auth import login
+from trembling import Redirect
+^L
+if request.POST:
+    if login(request,
+            request.body.one('username'),
+            request.body.one('password')):
+        raise Redirect('/')
+
+^L
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST">
+    <label for="username">Username:<input name="username" type="text"/></label>
+    <label for="password">Password:<input name="password" type="password"/></label>
+    <input type="submit" value="Login" />
+</form>
+{% end %}

@@ -1,4 +1,7 @@
 *.pyc
 *.swo
 *.swp
+.coverage
+htmlcov
 venv
+build
