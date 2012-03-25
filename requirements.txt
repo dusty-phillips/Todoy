@@ -1,4 +1,6 @@
-ipython==0.12
 -e git+git@github.com:whit537/aspen.git@master#egg=aspen
 -e git+git@github.com:buchuki/pyjaco.git@devel#egg=pyjaco-dev
+-e git+git@github.com:buchuki/trembling.git@master#egg=trembling
+mongoengine
+FormEncode
 
