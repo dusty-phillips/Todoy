@@ -1,0 +1,10 @@
+# -*- Python Django -*-
+from trembling.auth import login_required
+^L
+login_required(request)
+^L
+{% extends 'base.html' %}
+
+{% block content %}
+Hello {{request.user.username}}, Welcome to your private page.
+{% end %}

@@ -1,12 +1,11 @@
 ^L
-if request.authenticated:
-    name = request.user.username
-else:
-    name = "nobody"
-
 ^L
 {% extends 'base.html' %}
 
 {% block content %}
-hello {{name}} how are you today?
+    {% if request.authenticated %}
+        <a href="/home/">Your Personal Home</a>
+    {% else %}
+        <a href="/account/login.html">Login</a>
+    {% end %}
 {% end %}
