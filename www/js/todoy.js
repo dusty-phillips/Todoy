@@ -2,7 +2,7 @@ var setup = function() {
     var __kwargs = __kwargs_get(arguments);
     var __varargs = __varargs_get(arguments);
     var $v1 = Array.prototype.slice.call(arguments).concat(js(__varargs));
-    validate(str('#registration_form'), dict([str('confirm_password'), str('The passwords do not match')]), __kwargs_make({username: str('required'), password: str('required'), confirm_password: dict([str('equalTo'), str('input[name=password]')])}));
+    validate(str('#registration_form'), dict([str('confirm_password'), str('The passwords do not match'), str('username'), str("I'm afraid that username is taken")]), __kwargs_make({username: dict([str('required'), __builtins__.PY$True, str('remote'), str('user_valid.json')]), password: str('required'), confirm_password: dict([str('equalTo'), str('input[name=password]')])}));
 return None;
 }
 var validate = function() {

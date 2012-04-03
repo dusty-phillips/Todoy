@@ -1,5 +1,4 @@
 # -*- python -*-
-import json
 from aspen import Response
 from trembling.auth import User
 from trembling import Redirect
@@ -46,7 +45,7 @@ if request.POST:
     except InvalidDataError as e:
         print e.error_dict()
         response = Response(406, json.dumps(
-            {k:v.message for k,v in e.error_dict().iteritems()}))
+            {k: v.message for k, v in e.error_dict().iteritems()}))
     else:
         print "VALID"
 
