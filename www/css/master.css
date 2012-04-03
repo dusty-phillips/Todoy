@@ -4,3 +4,6 @@ body {
 .error {
     color: #f66;
 }
+.messages {
+    background-color: #bbeecc;
+}

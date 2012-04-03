@@ -20,6 +20,7 @@ if request.POST:
     user = User(username=form.one('username'))
     user.set_password(form.one('password'))
     user.save()
+    request.session['messages'] = 'You have registered as "%s"' % user.username
     raise Redirect(LOGIN_URL)
 
 
