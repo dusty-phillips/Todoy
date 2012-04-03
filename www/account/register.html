@@ -1,53 +1,27 @@
 # -*- python -*-
 from aspen import Response
-from trembling.auth import User
+from trembling.auth import User, LOGIN_URL
 from trembling import Redirect
-from pycerberus.schema import SchemaValidator
-from pycerberus.validators import StringValidator
-from pycerberus.api import Validator
-from pycerberus.errors import InvalidDataError
-
-
-class UniqueUsername(StringValidator):
-    messages = {
-        "user_exists":  "Sorry, an account for '%(username)' has already been created"
-    }
-
-    def validate(self, converted_value, context):
-        existing_user = User.objects(username=converted_value)
-        if existing_user:
-            self.error('user_exists', converted_value, context, username=converted_value)
-
-
-class PasswordsMatch(Validator):
-    messages = {
-        'no_match': "The passwords do not match"
-    }
-
-    def validate(self, fields, context):
-        if fields['password'] != fields['confirm_password']:
-            self.error('no_match', fields, context=context)
-
-
-class RegistrationValidation(SchemaValidator):
-    username = UniqueUsername(required=True)
-    password = StringValidator(required=True)
-    confirm_password = StringValidator(required=True)
-    formvalidators = (PasswordsMatch,)
 
 ^L
 if request.POST:
-    try:
-        schema = RegistrationValidation()
-        schema.process({"username": request.body.one('username'),
-            'password': request.body.one('password'),
-            'confirm_password': request.body.one('confirm_password')})
-    except InvalidDataError as e:
-        print e.error_dict()
-        response = Response(406, json.dumps(
-            {k: v.message for k, v in e.error_dict().iteritems()}))
-    else:
-        print "VALID"
+    # Validation "should have" happened in javascript, so we don't
+    # have to be pretty with error codes here.
+    form = request.body
+    if User.objects(username=form.one('username')):
+        raise Response(406, "Username already registered")
+    if form.one('password') != form.one('confirm_password'):
+        raise Response(406, "Passwords don't match")
+    if not form.one('password'):
+        raise Response(406, 'No Password supplied')
+    if not  form.one('username'):
+        raise Response(406, "Username is required")
+
+    user = User(username=form.one('username'))
+    user.set_password(form.one('password'))
+    user.save()
+    raise Redirect(LOGIN_URL)
+
 
 ^L
 {% extends 'base.html' %}
