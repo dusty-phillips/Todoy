@@ -4,6 +4,7 @@ from trembling.auth import login_required
 login_required(request)
 ^L
 {% extends 'base.html' %}
+{% block cache_manifest %} manifest="cache.manifest"{% end %}
 
 {% block content %}
 Hello {{request.user.username}}, Welcome to your private page.

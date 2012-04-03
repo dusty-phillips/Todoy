@@ -1,0 +1,15 @@
+CACHE MANIFEST
+
+CACHE:
+/home/
+/home/index.html
+/css/master.css
+/js/jquery-1.7.1.min.js
+/js/jquery.validate.min.js
+/js/py-builtins.js
+/js/todoy.js
+
+FALLBACK:
+/ /offline.html
+/account/* /offline.html
+
