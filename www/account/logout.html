@@ -3,6 +3,7 @@ from trembling.auth import logout
 from trembling import Redirect
 ^L
 logout(request)
+request.session['messages'] = "You have successfully logged out"
 raise Redirect("/")
 
 ^L
