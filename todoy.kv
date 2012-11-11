@@ -1,0 +1,14 @@
+
+ScreenManager:
+    Screen:
+        name: 'today_screen'
+        BoxLayout:
+            Label:
+                text: "TODOs"
+            Button:
+                text: "Add Todo"
+                on_press: root.current="add_todo_screen"
+    Screen:
+        name: 'add_todo_screen'
+        Label:
+            text: "add"
