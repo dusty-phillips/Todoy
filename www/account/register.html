@@ -1,7 +1,6 @@
 # -*- python -*-
 from aspen import Response
 from trembling.auth import User, LOGIN_URL
-from trembling import Redirect
 
 ^L
 if request.POST:
@@ -21,8 +20,7 @@ if request.POST:
     user.set_password(form.one('password'))
     user.save()
     request.session['messages'] = 'You have registered as "%s"' % user.username
-    raise Redirect(LOGIN_URL)
-
+    request.redirect(LOGIN_URL)
 
 ^L
 {% extends 'base.html' %}

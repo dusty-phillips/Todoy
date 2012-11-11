@@ -1,12 +1,11 @@
 # -*- python -*-
 from trembling.auth import login
-from trembling import Redirect
 ^L
 if request.POST:
     if login(request,
             request.body.one('username'),
             request.body.one('password')):
-        raise Redirect('/')
+        request.redirect("/")
 
 ^L
 {% extends 'base.html' %}
