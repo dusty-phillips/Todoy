@@ -56,15 +56,32 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Line
 from kivy.clock import Clock
 from kivy.gesture import Gesture, GestureDatabase
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, NumericProperty
 
 
 class GestureBox(BoxLayout):
     'GestureBox class. See module documentation for more information.'
 
-    gesture_timeout = 200
-    gesture_distance = 100
+    gesture_timeout = NumericProperty(200)
+    '''Timeout allowed to trigger the :data:`gesture_distance`, in milliseconds.
+    If the user has not moved :data:`gesture_distance` within the timeout,
+    the gesture will be disabled, and the touch event will go to the children.
 
+    :data:`gesture_timeout` is a :class:`~kivy.properties.NumericProperty`,
+    default to 200 (milliseconds)
+    '''
+
+    gesture_distance = NumericProperty('20dp')
+    '''Distance to move before attempting to interpret as a gesture,
+    in pixels. As soon as the distance has been traveled,
+    the :class:`GestureBox` will interpret as a gesture.
+
+    It is advisable that you base this value on the dpi of your target device's
+    screen.
+
+    :data:`gesture_distance` is a :class:`~kivy.properties.NumericProperty`,
+    default to 20dp.
+    '''
     # INTERNAL USE ONLY
     # used internally to store a touch and
     # dispatch it if the touch does not turn into a gesture
@@ -76,11 +93,24 @@ class GestureBox(BoxLayout):
         self.register_event_type('on_gesture')
 
     def add_gesture(self, name, gesture_str):
+        '''Add a recognized gesture to the database.
+
+        :param name: a short identifier for the gesture. This value is passed
+            to the on_gesture event to identify which gesture occurred.
+        :param gesture_str: A (probably very long) string describing the
+            gesture and suitable as input to the
+            :meth:`GestureDatabase.str_to_gesture` method. The
+            `examples/gestures/gesture_board.py` example is a good way to
+            generate such gestures.'''
         gesture = self.gestures.str_to_gesture(gesture_str)
         gesture.name = name
         self.gestures.add_gesture(gesture)
 
     def on_touch_down(self, touch):
+        '''(internal) When the touch down event occurs, we save it until we
+        know for sure that a gesture is not being initiated. If a gesture
+        is initiated we intercept all the touch and motion events. Otherwise,
+        we release it to any child widgets.'''
         if not self.collide_point(*touch.pos):
             touch.ud[self._get_uid('cavoid')] = True
             return
@@ -92,12 +122,17 @@ class GestureBox(BoxLayout):
         touch.ud[uid] = {
             'mode': 'unknown',
             'time': touch.time_start}
+        # This will be unscheduled if we determine that a gesture is being
+        # attempted before it is called.
         Clock.schedule_once(self._change_touch_mode,
                 self.gesture_timeout / 1000.)
+        # Start storing the gesture line in case this turns into a gesture
         touch.ud['gesture_line'] = Line(points=(touch.x, touch.y))
         return True
 
     def on_touch_move(self, touch):
+        '''(internal) As with touch down events, motion events are recorded
+        until we know that a gesture is or is not being attempted.'''
         if self._get_uid('cavoid') in touch.ud:
             return
         if self._touch is not touch:
@@ -111,10 +146,14 @@ class GestureBox(BoxLayout):
             dy = abs(touch.oy - touch.y)
             distance = sqrt(dx * dx + dy * dy)
 
+            # If we've moved more than the thershold distance inside the
+            # threshold time, treat as a gesture
             if distance > self.gesture_distance:
                 Clock.unschedule(self._change_touch_mode)
                 ud['mode'] = 'gesture'
 
+        # Regardless of whether this is a known gesture or not, collect
+        # the motion point in case it becomes one.
         try:
             touch.ud['gesture_line'].points += [touch.x, touch.y]
         except KeyError:
@@ -123,6 +162,9 @@ class GestureBox(BoxLayout):
         return True
 
     def on_touch_up(self, touch):
+        '''(internal) When the touch up occurs, we have to decide if a gesture
+        was attempted. If so, we fire the on_gesture event. In all other cases
+        we propogate the change to child widget.'''
         if self._get_uid('cavoid') in touch.ud:
             return
         if self in [x() for x in touch.grab_list]:
@@ -134,6 +176,7 @@ class GestureBox(BoxLayout):
                 super(GestureBox, self).on_touch_down(touch)
                 Clock.schedule_once(partial(self._do_touch_up, touch), .1)
             else:
+                # A gesture was attempted. Did it match?
                 gesture = Gesture()
                 gesture.add_stroke(
                     zip(touch.ud['gesture_line'].points[::2],
@@ -165,14 +208,6 @@ class GestureBox(BoxLayout):
             touch.grab_current = x
             super(GestureBox, self).on_touch_up(touch)
         touch.grab_current = None
-        gesture = Gesture()
-        gesture.add_stroke(
-            zip(touch.ud['gesture_line'].points[::2],
-                touch.ud['gesture_line'].points[1::2]))
-        gesture.normalize()
-        match = self.gestures.find(gesture, minscore=0.70)
-        if match:
-            self.dispatch('on_gesture_' + match[1].name)
         return True
 
     def _change_touch_mode(self, *largs):
