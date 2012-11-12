@@ -1,7 +1,57 @@
+'''
+GestureBox
+==========
+
+.. versionadded:: 1.5.0
+
+The :class:`GestureBox` widget allows you to define gestures in a subclass and
+bind to events on the named gestures. Any widgets added to the GestureBox are
+rendered as normal in a BoxLayout. You can interact with them normally and the
+touch events will be passed through. However, if you start to draw a gesture,
+the GestureBox will capture the inputs and determine if they match any gestures
+associated with the GestureBox. If they are, the events will not be propogated
+and a on_gesture event will be fired instead.
+
+Example::
+
+    class ExampleApp(App):
+        def build(self):
+            gesture_box = GestureBox()
+            gesture_box.add_gesture("down_swipe",
+                'eNq1l91yIkcMhe/nReybpVr/0guwt6nyA6Qcm7Kp3dgUsNns20ejxsyQOGFTruFm4ND9taTTqJvb7ZftHz9WT5vD8dt+M3w+PXdtuH3cwXB383L/++Zm2GG+zQcNh7ubw3H/+mVzyI883H7dyXD7LuSuhg07HVGW83ev25fjOM3HafEv034ZRw076BGMIfzIKYDDuq0EHULBUEJDnMdo/hy/pWH9qa0aIXkDbOZuKk1lOPx2/9/LcC0jw1NfgZ1aCyEEFGaxTPjpjc4t8aq5slm+w+vwSh3sDGcy0DFCz9iwyRyO2IgacUQosf9E6F70ONOhEVh4a4oZIemH6Fj1R3ijE5GGgXCAIIbax+hYdFqIXqaiLEQvV/HsKkZjE5AWLiHK/DF6uYpnV0ExvTQT40am7jP6/9/uVK4SLEQvV4kWoperJAvRy1U6uwpg4gYkmGTlbEQTHZ2lOZulv57LX+8EVK5SLEPncpXPrjZ2x9xsetqa8/2OKKKR1cnCZS9jvU4vV5kWoperfHK1vCP1cPNsxRJp8gwPrOEUEM119Nav48tWtqXw5SvHhO87DjxEoHE6PsM30wAYq5cngPzEppQyVmApfDkrdMaDAUKeUtnEWrbM+QmSpyJLkAJgUFZKrhdHylqRpfBlrdhS+LJWJmsvWrmet/1IT1MMWSU8f89ofBWuZaxOxhIxWqAGs2KeFDrR00vM9bBhU5UceJ1eviotRC9bVRail6tqC9HLVJ1MJTU1b5EAJnKQiU6ei1mwEXgafh1uZapNpvK4J7IjJirQY0Kzg0aY5WbNy1q73iWtHDVaAl122mRnnj6QzLz/knPj4Amed9YIlHyaMFC/zoz/CB72m83L+X5vOl7wzYbbdV6kV21Yq1I+jjvz4X4mYheji61E8RK9XYjSRSgRoovQReyilciti9RFLRFPIs/F1kPKJCYxr29d1LnIPU63WfB5PnfxlBGVKLSK+YvHEaf0isUV+3EXPT2q9OjEip4eYYnSQ4meHlV61E4je3oV2Dq96mJPT3Dsd9NLcwTypUbj8J64FBjfwD3xcmYN5u9M61WoQq1BuzHhF2I3JmIu5joXpbEcAa39bUgrFS5U+WcQ0PBiCL3HpuuUrFjfwc+b7dPzcfwrmf/K1nmXz0kpf98+Hp9LzSqyd/H4+nWzv3952NQXVve5UT/9vn7d7V8fvz10mGdpV5a70iw/RPaqaiSrvwDFYvqM'
+                )
+            gesture_box.add_gesture("circle",
+                'eNq1WNtyGzcMfd8fiV+iIS4EyB9QXzuTD+g4icbxpLU1ttI2f18QoHa5jpy12qlGAyUw9hA4ByQh3dx/vf/z++7u8Hz69nSYfumfxzTdfD7C9OHdw+0fh3fTEe2f9kHT84d3z6enx6+HZ/svTze/H/N0cxHkg4dNR2lQas8fH+8fTu2x0h6rrzz2a4uajhAZtBS+2yOA0z7tCDMkqjk1y0W1pfN3+zNN+/dpl0pGqmdLJcv0/PH25+uwr5Onu74EMxErVLeGMT3fNXQDT4C1kopbLVBhG92LB91Gh6RJinRb5A2ZF8euM/aP5JyxhVVShbBiJW9ho7OPcMZG1YTzWzTP2LgAm8XyBmx0bJqxsfSkm8UqMzaRluVduW5ju5o4qwkKmFWruM28cGLNcW3eriXOWi5kv8zbNK7GcwmbabtP0LXEWcuB7MY3pSVxVuRMiGFJaBOcXEzqYrZtwglLEsluBdOSen7R5LiN7nISzehAwsQZwC3yfwJ3PSnP4FZ31fnNrZX/PS8uKOkCvpBiFkfSF2Sz3PpoC9wVpTqDExXKmkvYmoc274S8nRZ2RXlR1B5u5xGG1bKcK7a5rtz77ILyIihVSVzL2bb8zuB4LefsgnJ+AzjQtTuUXVBeBCVRTKSMbq1HA/u9b7DMohpWSLbPFnZFuf4/6NklzYOki57N1rzAQ8YV/HY3Ztc0L5piXR0BMqAj1GItLmELb/OeXdQ87FKB8QhIOKDXOXGzOb2BGVc1D9sUaNxJNiPM6LQkbpbS9lbKrmpeVAXluRtTTloXdDs2B95z3UYXV1UWVe2aPydutqAO6HIt7+KqCm0f7A2+Fk1JkNyiTQ+b8C6rzJdpyrkoQUlhUx6IZ61XEi8uqyzXKSODTSphAcsAjnBlz4irKvN9CjVxsXEwu2UZ9iopXcmLuqgKWwOMb2JJNoh2y284B9Q11WU6En2NFuRrFVVXVJdhN71QdDhjBIe3a/3xtg3/n54Oh4d5lFdps7zNmjd7Rt2laY9ad3V88XQ6apluW0TxiAL2Yc7qTkqjs6RwSjgxnOBOhpUTw6krJ7kz06up2D3iETUiNB7L7pT+WLZhf3hJi5CIiLyU4zENZ5SlPYWoVSNZTeGMWv25vWnqzhq1amBKYNaotcTjuUdGrSXy8+rMGbWW7E6u66SpRUStJRbgvGZDW0QUXqICjgqqjE6q4dSVM19Yrawi4MJqwUIJyTBqg5TGOpC6F1be9ON6ttdGVkB+XNA2ZYREjwFfCgmSNJKC8/JBjMbyAN0bzLjS5k3dG9RoLJJK95axY9K52KBAohGShBeCAgncdIFcABj79nJI8JHzT0L6/kg/CQk+mFd5Q/BBtKoRZNzXZz4g+MC0YhSCD+hqXWhGgCAn1dcFxWAqdV0uND1gMJWCTIyeBnRy7CtZeLl7KbxRLPaykMObXu1k+1rpIb2VL20Hm9siJFKlTiTqylu7t4SXx31o35ZW3p4zpZVXLyxNsAq5xBIFH/1syH1FCj76Hs69PSn4KHU8k2w+D5aCZ+lbhKLqGvVJF5+i6hp0yRk3WiLFWSedfepdQOMBCtyFl/GsBe5a9xO4r8axESCNh7UNo+GFVw95YB57VHuaHL0Pebwy7DYPb79IevLcex/W3n7/0dobhWI+X1buzVEoytprhcYN/OVwf/fl1H70sql+ry83CbbfxP66/3z64iF2m9sJZxjmPT3+fni6ffh08L9w/IixfkGL68PDb8enx8/fPsVSedrnnc05diDYoIA2CpbUvu7t/gFuoPx3'
+                )
+
+            gesture_box.bind(on_gesture=self.gesture)
+            button = Button(text="Click here and it gets propogated.\n"
+                "Down stroke or draw a circle to invoke a gesture event")
+
+            button.bind(on_press=self.button_press)
+            gesture_box.add_widget(button)
+
+            return gesture_box
+
+        def gesture(self, gesture_box, gesture_name):
+            print "{0} gesture occured".format(gesture_name)
+
+        def button_press(self, button):
+            print "The button got pressed"
+
+    ExampleApp().run()
+
+The easiest way to generate the long strings passed into add_gesture is to run
+`python examples/gestures/gesture_board.py` Draw your chosen gesture in the
+window and copy the long string from the gesture representation that shows up
+in the terminal.
+'''
+
+__all__ = ('GestureBox',)
+
 from math import sqrt
 from functools import partial
 
-from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Line
 from kivy.clock import Clock
@@ -9,13 +59,13 @@ from kivy.gesture import Gesture, GestureDatabase
 from kivy.properties import ObjectProperty
 
 
-# TODO: This is a nice generic class that is going to go into it's own package
-# and possibly belongs in Kivy
 class GestureBox(BoxLayout):
+    'GestureBox class. See module documentation for more information.'
 
     gesture_timeout = 200
     gesture_distance = 100
 
+    # INTERNAL USE ONLY
     # used internally to store a touch and
     # dispatch it if the touch does not turn into a gesture
     _touch = ObjectProperty(None, allownone=True)
@@ -23,12 +73,12 @@ class GestureBox(BoxLayout):
     def __init__(self, *args, **kwargs):
         super(GestureBox, self).__init__(*args, **kwargs)
         self.gestures = GestureDatabase()
+        self.register_event_type('on_gesture')
 
     def add_gesture(self, name, gesture_str):
         gesture = self.gestures.str_to_gesture(gesture_str)
         gesture.name = name
         self.gestures.add_gesture(gesture)
-        self.register_event_type('on_gesture_' + name)
 
     def on_touch_down(self, touch):
         if not self.collide_point(*touch.pos):
@@ -91,7 +141,7 @@ class GestureBox(BoxLayout):
                 gesture.normalize()
                 match = self.gestures.find(gesture, minscore=0.70)
                 if match:
-                    self.dispatch('on_gesture_' + match[1].name)
+                    self.dispatch('on_gesture', match[1].name)
                 else:
                     # FIXME: If the gesture isn't recognized, it should
                     # probably be propogated to the child
@@ -142,3 +192,40 @@ class GestureBox(BoxLayout):
 
     def _get_uid(self, prefix='sv'):
         return '{0}.{1}'.format(prefix, self.uid)
+
+    def on_gesture(self, gesture_name):
+        # A gesture event happened
+        pass
+
+
+if __name__ == '__main__':
+    from kivy.app import App
+    from kivy.uix.button import Button
+
+    class ExampleApp(App):
+        def build(self):
+            gesture_box = GestureBox()
+            gesture_box.add_gesture("down_swipe",
+                'eNq1l91yIkcMhe/nReybpVr/0guwt6nyA6Qcm7Kp3dgUsNns20ejxsyQOGFTruFm4ND9taTTqJvb7ZftHz9WT5vD8dt+M3w+PXdtuH3cwXB383L/++Zm2GG+zQcNh7ubw3H/+mVzyI883H7dyXD7LuSuhg07HVGW83ev25fjOM3HafEv034ZRw076BGMIfzIKYDDuq0EHULBUEJDnMdo/hy/pWH9qa0aIXkDbOZuKk1lOPx2/9/LcC0jw1NfgZ1aCyEEFGaxTPjpjc4t8aq5slm+w+vwSh3sDGcy0DFCz9iwyRyO2IgacUQosf9E6F70ONOhEVh4a4oZIemH6Fj1R3ijE5GGgXCAIIbax+hYdFqIXqaiLEQvV/HsKkZjE5AWLiHK/DF6uYpnV0ExvTQT40am7jP6/9/uVK4SLEQvV4kWoperJAvRy1U6uwpg4gYkmGTlbEQTHZ2lOZulv57LX+8EVK5SLEPncpXPrjZ2x9xsetqa8/2OKKKR1cnCZS9jvU4vV5kWoperfHK1vCP1cPNsxRJp8gwPrOEUEM119Nav48tWtqXw5SvHhO87DjxEoHE6PsM30wAYq5cngPzEppQyVmApfDkrdMaDAUKeUtnEWrbM+QmSpyJLkAJgUFZKrhdHylqRpfBlrdhS+LJWJmsvWrmet/1IT1MMWSU8f89ofBWuZaxOxhIxWqAGs2KeFDrR00vM9bBhU5UceJ1eviotRC9bVRail6tqC9HLVJ1MJTU1b5EAJnKQiU6ei1mwEXgafh1uZapNpvK4J7IjJirQY0Kzg0aY5WbNy1q73iWtHDVaAl122mRnnj6QzLz/knPj4Amed9YIlHyaMFC/zoz/CB72m83L+X5vOl7wzYbbdV6kV21Yq1I+jjvz4X4mYheji61E8RK9XYjSRSgRoovQReyilciti9RFLRFPIs/F1kPKJCYxr29d1LnIPU63WfB5PnfxlBGVKLSK+YvHEaf0isUV+3EXPT2q9OjEip4eYYnSQ4meHlV61E4je3oV2Dq96mJPT3Dsd9NLcwTypUbj8J64FBjfwD3xcmYN5u9M61WoQq1BuzHhF2I3JmIu5joXpbEcAa39bUgrFS5U+WcQ0PBiCL3HpuuUrFjfwc+b7dPzcfwrmf/K1nmXz0kpf98+Hp9LzSqyd/H4+nWzv3952NQXVve5UT/9vn7d7V8fvz10mGdpV5a70iw/RPaqaiSrvwDFYvqM'
+                )
+            gesture_box.add_gesture("circle",
+                'eNq1WNtyGzcMfd8fiV+iIS4EyB9QXzuTD+g4icbxpLU1ttI2f18QoHa5jpy12qlGAyUw9hA4ByQh3dx/vf/z++7u8Hz69nSYfumfxzTdfD7C9OHdw+0fh3fTEe2f9kHT84d3z6enx6+HZ/svTze/H/N0cxHkg4dNR2lQas8fH+8fTu2x0h6rrzz2a4uajhAZtBS+2yOA0z7tCDMkqjk1y0W1pfN3+zNN+/dpl0pGqmdLJcv0/PH25+uwr5Onu74EMxErVLeGMT3fNXQDT4C1kopbLVBhG92LB91Gh6RJinRb5A2ZF8euM/aP5JyxhVVShbBiJW9ho7OPcMZG1YTzWzTP2LgAm8XyBmx0bJqxsfSkm8UqMzaRluVduW5ju5o4qwkKmFWruM28cGLNcW3eriXOWi5kv8zbNK7GcwmbabtP0LXEWcuB7MY3pSVxVuRMiGFJaBOcXEzqYrZtwglLEsluBdOSen7R5LiN7nISzehAwsQZwC3yfwJ3PSnP4FZ31fnNrZX/PS8uKOkCvpBiFkfSF2Sz3PpoC9wVpTqDExXKmkvYmoc274S8nRZ2RXlR1B5u5xGG1bKcK7a5rtz77ILyIihVSVzL2bb8zuB4LefsgnJ+AzjQtTuUXVBeBCVRTKSMbq1HA/u9b7DMohpWSLbPFnZFuf4/6NklzYOki57N1rzAQ8YV/HY3Ztc0L5piXR0BMqAj1GItLmELb/OeXdQ87FKB8QhIOKDXOXGzOb2BGVc1D9sUaNxJNiPM6LQkbpbS9lbKrmpeVAXluRtTTloXdDs2B95z3UYXV1UWVe2aPydutqAO6HIt7+KqCm0f7A2+Fk1JkNyiTQ+b8C6rzJdpyrkoQUlhUx6IZ61XEi8uqyzXKSODTSphAcsAjnBlz4irKvN9CjVxsXEwu2UZ9iopXcmLuqgKWwOMb2JJNoh2y284B9Q11WU6En2NFuRrFVVXVJdhN71QdDhjBIe3a/3xtg3/n54Oh4d5lFdps7zNmjd7Rt2laY9ad3V88XQ6apluW0TxiAL2Yc7qTkqjs6RwSjgxnOBOhpUTw6krJ7kz06up2D3iETUiNB7L7pT+WLZhf3hJi5CIiLyU4zENZ5SlPYWoVSNZTeGMWv25vWnqzhq1amBKYNaotcTjuUdGrSXy8+rMGbWW7E6u66SpRUStJRbgvGZDW0QUXqICjgqqjE6q4dSVM19Yrawi4MJqwUIJyTBqg5TGOpC6F1be9ON6ttdGVkB+XNA2ZYREjwFfCgmSNJKC8/JBjMbyAN0bzLjS5k3dG9RoLJJK95axY9K52KBAohGShBeCAgncdIFcABj79nJI8JHzT0L6/kg/CQk+mFd5Q/BBtKoRZNzXZz4g+MC0YhSCD+hqXWhGgCAn1dcFxWAqdV0uND1gMJWCTIyeBnRy7CtZeLl7KbxRLPaykMObXu1k+1rpIb2VL20Hm9siJFKlTiTqylu7t4SXx31o35ZW3p4zpZVXLyxNsAq5xBIFH/1syH1FCj76Hs69PSn4KHU8k2w+D5aCZ+lbhKLqGvVJF5+i6hp0yRk3WiLFWSedfepdQOMBCtyFl/GsBe5a9xO4r8axESCNh7UNo+GFVw95YB57VHuaHL0Pebwy7DYPb79IevLcex/W3n7/0dobhWI+X1buzVEoytprhcYN/OVwf/fl1H70sql+ry83CbbfxP66/3z64iF2m9sJZxjmPT3+fni6ffh08L9w/IixfkGL68PDb8enx8/fPsVSedrnnc05diDYoIA2CpbUvu7t/gFuoPx3'
+                )
+
+            gesture_box.bind(on_gesture=self.gesture)
+            button = Button(text="Click here and it gets propogated.\n"
+                "Down stroke or draw a circle to invoke a gesture event")
+
+            button.bind(on_press=self.button_press)
+            gesture_box.add_widget(button)
+
+            return gesture_box
+
+        def gesture(self, gesture_box, gesture_name):
+            print "{0} gesture occured".format(gesture_name)
+
+        def button_press(self, button):
+            print "The button got pressed"
+
+    if __name__ == '__main__':
+        ExampleApp().run()
