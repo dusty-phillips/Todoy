@@ -198,6 +198,7 @@ class GestureBox(BoxLayout):
         return self._get_uid() in touch.ud
 
     def _do_touch_up(self, touch, *largs):
+        '''(internal) Simulate touch up events for anything that has grabbed the touch'''
         super(GestureBox, self).on_touch_up(touch)
         # don't forget about grab event!
         for x in touch.grab_list[:]:
@@ -211,6 +212,8 @@ class GestureBox(BoxLayout):
         return True
 
     def _change_touch_mode(self, *largs):
+        '''(internal) Simulate a touch down if we know the touch did not become
+        a gesture'''
         if not self._touch:
             return
         uid = self._get_uid()
@@ -230,7 +233,9 @@ class GestureBox(BoxLayout):
         return '{0}.{1}'.format(prefix, self.uid)
 
     def on_gesture(self, gesture_name):
-        # A gesture event happened
+        '''Called whenever a gesture has occured. This is a Kivy event. It
+        can be overridden in a subclass our bound to using :meth:`Widget.bind`.
+        '''
         pass
 
 
