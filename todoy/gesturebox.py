@@ -143,9 +143,10 @@ class GestureBox(BoxLayout):
                 if match:
                     self.dispatch('on_gesture', match[1].name)
                 else:
-                    # FIXME: If the gesture isn't recognized, it should
-                    # probably be propogated to the child
-                    pass
+                    # The gesture wasn't recognized; invoke a normal reaction
+                    super(GestureBox, self).on_touch_down(touch)
+                    Clock.schedule_once(partial(self._do_touch_up, touch), .1)
+
                 return True
 
         else:
