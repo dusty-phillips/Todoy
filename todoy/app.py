@@ -16,7 +16,6 @@ class GestureContainer(GestureBox):
             self.get_root_window().children[0].current = "add_todo_screen"
 
 
-
 class TodoyApp(App):
     pass
 
