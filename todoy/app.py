@@ -10,7 +10,11 @@ class GestureContainer(GestureBox):
             )
 
     def on_gesture(self, gesture_name):
-        print gesture_name
+        if gesture_name == "down_swipe":
+            # I am shocked that widgets don't have a root
+            # property
+            self.get_root_window().children[0].current = "add_todo_screen"
+
 
 
 class TodoyApp(App):
