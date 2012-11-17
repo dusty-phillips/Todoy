@@ -11,6 +11,7 @@ ScreenManager:
             orientation: 'vertical'
             Button:
                 text: "Add Habit"
+                on_press: root.current = 'add_habit_screen'
             Button:
                 text: "Add Commitment"
             Button:
@@ -19,4 +20,16 @@ ScreenManager:
                 text: "Add Goal"
             Button:
                 text: "Add Task"
+    Screen:
+        name: 'add_habit_screen'
+        BoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+                Label:
+                    text: 'Habit Name'
+                TextInput:
+                    id: 'habit_name'
+            Button:
+                text: 'Cancel'
+                on_press: root.current = 'today_screen'
 
