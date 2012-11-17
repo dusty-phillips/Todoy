@@ -25,9 +25,13 @@ ScreenManager:
         BoxLayout:
             orientation: 'vertical'
             BoxLayout:
+                size_hint: 1, .1
                 Label:
-                    text: 'Habit Name'
+                    width: 100
+                    size_hint: None, 1
+                    text: 'Habit Name:'
                 TextInput:
+                    width: 1
                     id: 'habit_name'
             Button:
                 text: 'Cancel'
