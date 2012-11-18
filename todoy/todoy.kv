@@ -25,7 +25,8 @@ ScreenManager:
         BoxLayout:
             orientation: 'vertical'
             BoxLayout:
-                size_hint: 1, .1
+                size_hint: 1, None
+                height: 40
                 Label:
                     width: 100
                     size_hint: None, 1
@@ -33,6 +34,10 @@ ScreenManager:
                 TextInput:
                     width: 1
                     id: 'habit_name'
+            Button:
+                text: "Add Daily"
+            Button:
+                text: "Add Weekly"
             Button:
                 text: 'Cancel'
                 on_press: root.current = 'today_screen'
