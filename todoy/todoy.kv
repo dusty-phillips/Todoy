@@ -36,12 +36,13 @@ Todoy:
                         text: 'Habit Name:'
                     TextInput:
                         width: 1
-                        id: 'habit_name'
+                        id: habit_name
                 Button:
                     text: "Add Daily"
-                    on_press: 
+                    on_press: root.add_habit('daily', habit_name.text)
                 Button:
                     text: "Add Weekly"
+                    on_press: root.add_habit('weekly', habit_name.text)
                 Button:
                     text: "Cancel"
                     on_press: screen_manager.current = 'today_screen'

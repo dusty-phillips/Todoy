@@ -2,7 +2,7 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
 from .gesturebox import GestureBox
-from path import path as p
+from path import path
 
 
 class GestureContainer(GestureBox):
@@ -25,25 +25,34 @@ class Todoy(BoxLayout):
 
     def __init__(self):
         super(Todoy, self).__init__()
-        self.storage = Storage()
+        self.init_storage()
 
+    def add_habit(self, interval, habit_name):
+        '''Add a new habit. This creates a file in the habits/interval directory
+        for the new habit. Each day that the habit was marked complete is recorded
+        in that file.
 
-# May need to go in it's own module
-class Storage(object):
-    '''A simple mapping to filesystem objects. I'm going to define the storage
-    format as I go. All I know for sure is it will be filesystem and plaintext
-    based and easy to edit manually or in other systems.'''
+        :param interval: either of the strings "daily" or "weekly".
+        :param habit_name: the name of the habit to be added.'''
+        assert interval in 'daily', 'weekly'
+        habit_filename = self.root_path.joinpath('habits', interval, habit_name)
+        habit_filename.open('w').close()
 
-    def __init__(self):
-        '''Initialize the storage object, mostly by setting up paths.'''
-        self.root_path = p('~').expanduser().joinpath('.todoy').mkdir_p()
+    def init_storage(self):
+        '''Set up the directories for storing todos. I don't really know how
+        they are gonna look. Right now, I'm thinking directories of
+        appropriately formatted text files.
+        '''
+        self.root_path = path('~').expanduser().joinpath('.todoy').mkdir_p()
         habits = self.root_path.joinpath('habits').mkdir_p()
         habits.joinpath('daily').mkdir_p()
         habits.joinpath('weekly').mkdir_p()
 
 
 class TodoyApp(App):
-    '''The todoy.kv is attached to this app'''
+    '''The todoy.kv is attached to this app. It will hook up all the other
+    objects itself. :class:`Todoy` is the root object that contains all the
+    other elements and directs of the logic.'''
     pass
 
 
