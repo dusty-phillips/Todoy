@@ -1,5 +1,8 @@
 from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.properties import ObjectProperty
 from .gesturebox import GestureBox
+from path import path as p
 
 
 class GestureContainer(GestureBox):
@@ -13,11 +16,36 @@ class GestureContainer(GestureBox):
         if gesture_name == "down_swipe":
             # I am shocked that widgets don't have a root
             # property
-            self.get_root_window().children[0].current = "add_todo_screen"
+            self.get_root_window().children[0].screen_manager.current = "add_todo_screen"
+
+
+class Todoy(BoxLayout):
+    '''The root widget for the TodoyApp'''
+    screen_manager = ObjectProperty()
+
+    def __init__(self):
+        super(Todoy, self).__init__()
+        self.storage = Storage()
+
+
+# May need to go in it's own module
+class Storage(object):
+    '''A simple mapping to filesystem objects. I'm going to define the storage
+    format as I go. All I know for sure is it will be filesystem and plaintext
+    based and easy to edit manually or in other systems.'''
+
+    def __init__(self):
+        '''Initialize the storage object, mostly by setting up paths.'''
+        self.root_path = p('~').expanduser().joinpath('.todoy').mkdir_p()
+        habits = self.root_path.joinpath('habits').mkdir_p()
+        habits.joinpath('daily').mkdir_p()
+        habits.joinpath('weekly').mkdir_p()
 
 
 class TodoyApp(App):
+    '''The todoy.kv is attached to this app'''
     pass
+
 
 if __name__ == '__main__':
     TodoyApp().run()

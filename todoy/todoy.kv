@@ -1,44 +1,48 @@
 
-ScreenManager:
-    Screen:
-        name: 'today_screen'
-        GestureContainer:
-            Label:
-                text: "Todo List"
-    Screen:
-        name: 'add_todo_screen'
-        BoxLayout:
-            orientation: 'vertical'
-            Button:
-                text: "Add Habit"
-                on_press: root.current = 'add_habit_screen'
-            Button:
-                text: "Add Commitment"
-            Button:
-                text: "Add Appointment"
-            Button:
-                text: "Add Goal"
-            Button:
-                text: "Add Task"
-    Screen:
-        name: 'add_habit_screen'
-        BoxLayout:
-            orientation: 'vertical'
-            BoxLayout:
-                size_hint: 1, None
-                height: 40
+Todoy:
+    screen_manager: screen_manager
+    ScreenManager:
+        id: screen_manager
+        Screen:
+            name: 'today_screen'
+            GestureContainer:
                 Label:
-                    width: 100
-                    size_hint: None, 1
-                    text: 'Habit Name:'
-                TextInput:
-                    width: 1
-                    id: 'habit_name'
-            Button:
-                text: "Add Daily"
-            Button:
-                text: "Add Weekly"
-            Button:
-                text: 'Cancel'
-                on_press: root.current = 'today_screen'
+                    text: "Todo List"
+        Screen:
+            name: 'add_todo_screen'
+            BoxLayout:
+                orientation: 'vertical'
+                Button:
+                    text: "Add Habit"
+                    on_press: screen_manager.current = 'add_habit_screen'
+                Button:
+                    text: "Add Commitment"
+                Button:
+                    text: "Add Appointment"
+                Button:
+                    text: "Add Goal"
+                Button:
+                    text: "Add Task"
+        Screen:
+            name: 'add_habit_screen'
+            BoxLayout:
+                orientation: 'vertical'
+                BoxLayout:
+                    size_hint: 1, None
+                    height: 40
+                    Label:
+                        width: 100
+                        size_hint: None, 1
+                        text: 'Habit Name:'
+                    TextInput:
+                        width: 1
+                        id: 'habit_name'
+                Button:
+                    text: "Add Daily"
+                    on_press: 
+                Button:
+                    text: "Add Weekly"
+                Button:
+                    text: "Cancel"
+                    on_press: screen_manager.current = 'today_screen'
 
